@@ -1,4 +1,4 @@
-#to run the code in this file it must be located in the same folder as the files from the textgenrnn
+#to run the code in this file it must be located in the same folder as the files from the textgenrnn GitHub link
 from textgenrnn import textgenrnn
 
 import os
