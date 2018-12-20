@@ -6,7 +6,7 @@ import json
 #this is also ignoring the first n-1 words since in this model the sentence starts with a random common n gram
 #sentence will be an array of all the words i will need to construct this at some point
 #frequencies is from training
-def sentencepp(tweet, sequencer, frequencies, n):
+def sentencepp(tweet, sequencer, frequencies, n, totalNgrams):
     #log each probability then add together in for loop probably
     perplexity = 0.0
     sequence1 = []
@@ -26,8 +26,8 @@ def sentencepp(tweet, sequencer, frequencies, n):
         lst = sequencer.get(sequence)
         #if none then just get probability of word occurring in frequencies
         if lst == None:
-            sequence.append(word)
-            perplexity += math.log(frequencies[sequence])
+            #what do we do here currently just 
+            perplexity += math.log(1/totalNgrams)
         else:
             sequence.append(word)
             #lst can get conditional probability if sum over all possibilities
@@ -43,7 +43,16 @@ def sentencepp(tweet, sequencer, frequencies, n):
 #taking the average of all the perplexities of the sentences
 def corpuspp(corpus, sequencer, frequencies, n):
     #for each sentence in corpus do sentencepp and then average
-    tweet = ""
     perplexity = 0.0
+    #not really possible to backtrack to get total number of ngrams
+    totalNgrams = 100000000
+
+    #if read file outside of this function then replace lines with corpus and remove the next line
+    lines = [line.rstrip('\n') for line in open(corpus)]
+    for line in lines:
+        perplexity += sentencepp(line, sequencer, frequencies, n, totalNgrams)
+    perplexity = perplexity/len(lines)
+    return perplexity
+    
     
     
