@@ -1,3 +1,4 @@
+#to run the code in this file it must be located in the same folder as the files from the textgenrnn
 from textgenrnn import textgenrnn
 
 import os
