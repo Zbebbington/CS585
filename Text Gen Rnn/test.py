@@ -3,7 +3,7 @@ from textgenrnn import textgenrnn
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-#use this code to train a new model based on the supplied text document
+#use this code to train a new model based on the specified text document
 #textgen = textgenrnn()
 #textgen.train_from_file('tweets.txt', num_epochs = 5)
 
