@@ -15,7 +15,10 @@ def sentencepp(tweet, sequencer, frequencies, n, totalNgrams):
     #this is for the initial n-1 words
     #this is assuming that frequencies data structure is dictionary
     #also if the word is not in the dictionary not sure how we would want to handle that so leaving that empty for now
-    perplexity += math.log(frequencies[sequence1])
+    if(frequencies.get(sequence1) == None):
+        perplexity += math.log(1/totalNgrams)
+    else:
+        perplexity += math.log(frequencies[sequence1])
     #starting from word n
     for word, ind in tweet[(n-1):], enumerate(tweet, n-1):
         #here iterate through the list given by sequencer
