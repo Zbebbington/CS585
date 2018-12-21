@@ -15,6 +15,7 @@ perplexity.py
 
 A modification of the IBM article ngram model.
 used for getting the perplexity for the ngram models.
+Put into a folder in the NGRAM models with tweets.txt and ngram count JSON files. Run for designated ngram in the code. (default 7)
 
 retrieveTweets.py
 
