@@ -3,6 +3,7 @@ import json
 import string
 import random
 import csv
+import math
 
 POPULAR_NGRAM_COUNT = 10000
 #Population is all the possible items that can be generated
@@ -19,6 +20,7 @@ def preprocess_frequencies(frequencies, order):
             items completing it
         popular_ngrams -- list of most common N-grams
     '''
+    #print(type(list(frequencies.keys())[0]))
     sequencer = {}
     ngrams_sorted_by_freq = [
         k for k in sorted(frequencies, key=frequencies.get, reverse=True)
@@ -55,25 +57,24 @@ def generate_letters(corpus, frequencies, sequencer, popular_ngrams, length, ord
         #This condition will be true until the initial lead N-gram is constructed
         #It will also be true if we get to a dead end where there are no stats
         #For the next item from the current lead
-        '''if lead not in sequencer:
-            #Pick an N-gram at random from the most popular
-            reset = random.choice(popular_ngrams)
-            #Drop the final item so that lead is N-1
-            lead = reset[:-1]
-            for item in lead:
-                #print(item, end='', flush=True)
-                out += item
-            generated_count += len(lead) + 1
-        else:
-            freq = sequencer[lead]
-            weights = [ freq.get(c, 0) for c in population ]
-            chosen = random.choices(population, weights=weights)[0]
+    #    if lead not in sequencer:
+     #       #Pick an N-gram at random from the most popular
+     #       reset = random.choice(popular_ngrams)
+      #      #Drop the final item so that lead is N-1
+     #       lead = reset[:-1]
+      #      for item in lead:
+      #          #print(item, end='', flush=True)
+       #         out += item
+     #       generated_count += len(lead) + 1
+       # else:
+         #   freq = sequencer[lead]
+         #   weights = [ freq.get(c, 0) for c in population ]
+          #  chosen = random.choices(population, weights=weights)[0]
             #print(chosen + ' ', end='', flush=True)
             #Clip the first item from the lead and tack on the new item
-            lead = lead[1:]+ chosen
-            generated_count += 2
-            out += chosen + ' '
-            '''
+           # lead = lead[1:]+ chosen
+           # generated_count += 2
+            #out += chosen + ' '
     #print(out)
     perplexity = corpuspp(corpus, sequencer, frequencies, order)
     print(perplexity)
@@ -88,9 +89,9 @@ def generate_letters(corpus, frequencies, sequencer, popular_ngrams, length, ord
 def sentencepp(tweet, sequencer, frequencies, n, totalNgrams):
     #log each probability then add together in for loop probably
     perplexity = 0.0
-    sequence1 = []
-    for wd in tweet[(ind - n +1): n-1]:
-        sequence1.append(wd)
+    sequence1 = ""
+    for wd in tweet[0: n-1]:
+        sequence1 = sequence1 + wd
     #this is for the initial n-1 words
     #this is assuming that frequencies data structure is dictionary
     #also if the word is not in the dictionary not sure how we would want to handle that so leaving that empty for now
@@ -99,26 +100,31 @@ def sentencepp(tweet, sequencer, frequencies, n, totalNgrams):
     else:
         perplexity += math.log(frequencies[sequence1])
     #starting from word n
-    for word, ind in tweet[(n-1):], enumerate(tweet, n-1):
+    ind = n -1
+    for word in tweet[(n-1):]:
         #here iterate through the list given by sequencer
-        sequence = []
+        sequence = ""
         for wd in tweet[(ind - n +1): n-1]:
-            sequence.append(wd)
+            sequence = sequence + wd
         #lst now contains a probability distribution or none
         lst = sequencer.get(sequence)
         #if none then just get probability of word occurring in frequencies
         if lst == None:
-            #what do we do here currently just 
+            #since this model will output a popular word when it encounters a ngram it never saw before we're going to assume probability
+            #of getting this word that might not be in popular ngrams to be basically a very small number so perplexity isn't 0
             perplexity += math.log(1/totalNgrams)
         else:
-            sequence.append(word)
-            #lst can get conditional probability if sum over all possibilities
+            sequence = sequence + word
+        #lst can get conditional probability if sum over all possibilities
             wordProb = lst.get(sequence)
-            total = 0.0
-            for key in lst.keys():
-                total += lst.get(key)
-            perplexity += math.log(wordProb/total)
-    print(perplexity)
+            if(wordProb == None):
+                perplexity += math.log(1/totalNgrams)
+            else:
+                total = 0.0
+                for key in lst.keys():
+                    total += lst.get(key)
+                perplexity += math.log(wordProb/total)
+        ind = ind + 1
     return perplexity
 
 #things worth taking note of
@@ -131,7 +137,8 @@ def corpuspp(corpus, sequencer, frequencies, n):
     totalNgrams = 100000000
 
     #if read file outside of this function then replace lines with corpus and remove the next line
-    lines = [line.rstrip('\n') for line in open(corpus)]
+    with open('tweets.txt', encoding='utf-8', errors='ignore') as f:
+        lines = f.read().splitlines()
     for line in lines:
         perplexity += sentencepp(line, sequencer, frequencies, n, totalNgrams)
     perplexity = perplexity/len(lines)
