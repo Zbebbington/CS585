@@ -51,7 +51,7 @@ def generate_letters(corpus, frequencies, sequencer, popular_ngrams, length, ord
     #Keep track of how many items have been generated
     generated_count = 0
     out = ''
-    while generated_count < length:
+    #while generated_count < length:
         #This condition will be true until the initial lead N-gram is constructed
         #It will also be true if we get to a dead end where there are no stats
         #For the next item from the current lead
