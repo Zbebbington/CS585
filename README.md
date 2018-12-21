@@ -25,7 +25,7 @@ tweet_downloader
 Code we wrote using the twitter API to download tweets from users
 Prunes out retweets. Max 3200 tweets.
 stores in tweets folder. The tweets that we used are in the tweets_to_use folder in the root.
-
+_______________
 Models we used:
 
 PytorchCharRNN source in folder
