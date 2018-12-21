@@ -38,7 +38,13 @@ bidirectional lstm - too big to upload onto github.
 
 ngram-markov-chars-words https://developer.ibm.com/articles/cc-patterns-artificial-intelligence-part3/
 
+____________
+notes:
 ignore ngram-markov (just a copy of the words folder)
 
 some of the models worked as is with our Twitter data. others we made slight modifications so that we could feed it tweets.
 individual readmes will be in model folders
+
+Python 3.6 for the ngram ones. Breaks on 3.7 because of an iteration issue.
+
+
