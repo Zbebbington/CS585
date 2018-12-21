@@ -1,3 +1,2 @@
-This model takes a very long time to actually train. When just taken from the source at https://github.com/campdav/Text-Generation-using-Bidirectional-LSTM-and-Doc2Vec-models,
-it took an hour just to train over 1 epoch. I made some modifications to the code over time shortening the time it took to train, but 
-worsening the output.
+This model takes a very long time to actually train. When just taken from the source at https://github.com/campdav/Text-Generation-using-Bidirectional-LSTM-and-Doc2Vec-models, it took an hour just to train over 1 epoch. I made some modifications to the code over time shortening the time it took to train, but worsening the output.
+The model that was trained over 5 epochs unfortunately is too large to fit onto github with over 200MB. However, even after all that time, the model was not very accurate with a lot of misplaced punctuation meaning that in order to further improve this model we'd need to give it more time which simply wasn't feasible.
