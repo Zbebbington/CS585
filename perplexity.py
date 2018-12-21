@@ -77,7 +77,7 @@ def generate_letters(corpus, frequencies, sequencer, popular_ngrams, length, ord
             #out += chosen + ' '
     #print(out)
     perplexity = corpuspp(corpus, sequencer, frequencies, order)
-    print(perplexity)
+    print(abs(perplexity))
     return out
 
     #sequencer is a map from n grams to probability distribution of next word
